@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 
 import { fetchItems, fetchItemDetails } from "../../actions/itemActions";
 import WindowedSelect from 'react-windowed-select';
+import ItemSet from './ItemSet.component';
 
 class PriceCheck extends PureComponent {
     constructor(props) {
         super(props);
         this.state = { options: [], selectValue: "" }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleFetch = this.handleFetch.bind(this);
     }
 
     async componentDidMount() {
@@ -25,27 +26,37 @@ class PriceCheck extends PureComponent {
         return options;
     }
 
-    async handleChange({ value }) {
-        this.setState({ selectValue: value })
-        this.props.fetchItemDetails(value);
+    async handleFetch({ value, label }) {
+        let selectValue = value;
+        if (!value) {
+            const itemByLabel = this.state.options.find(item => item.label === label);
+            selectValue = itemByLabel;
+        }
+        this.setState({ selectValue });
+        this.props.fetchItemDetails(selectValue.value);
     }
     render() {
-        const { options } = this.state;
+        const { options, selectValue } = this.state;
         const { itemDetails } = this.props;
         console.log(itemDetails);
         return (
             <div className="PriceCheck">
                 <h1 className="PriceCheck__label">Select Item:</h1>
-                <WindowedSelect className="PriceCheck__select" options={options} onChange={this.handleChange}></WindowedSelect>
+                <WindowedSelect className="PriceCheck__select" options={options} onChange={this.handleFetch} value={selectValue}></WindowedSelect>
+                <ItemSet itemDetails={itemDetails} handleFetch={this.handleFetch} />
             </div>
         )
     }
 }
 
 const mapState = state => {
+    const items_in_set = state.itemsReducer.itemDetails?.items_in_set.map(item => item.en);
     return {
         items: state.itemsReducer.items,
-        itemDetails: state.itemsReducer.itemDetails
+        itemDetails: {
+            id: state.itemsReducer.itemDetails?.id,
+            items_in_set
+        }
     }
 };
 
