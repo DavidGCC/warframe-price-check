@@ -1,4 +1,4 @@
-import { FETCH_ITEM, FETCH_ITEMS } from "../actions/types";
+import { FETCH_ITEM, FETCH_ITEMS, FETCH_ORDERS } from "../actions/types";
 
 export const itemsReducer = (state = [], action) => {
     switch (action.type) {
@@ -11,6 +11,11 @@ export const itemsReducer = (state = [], action) => {
             return {
                 ...state,
                 itemDetails: action.payload
+            }
+        case FETCH_ORDERS:
+            return {
+                ...state,
+                itemOrders: action.payload
             }
         default:
             return state;

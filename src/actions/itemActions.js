@@ -1,5 +1,5 @@
 import { axiosInstance } from "../config";
-import { FETCH_ITEM, FETCH_ITEMS } from "./types";
+import { FETCH_ITEM, FETCH_ITEMS, FETCH_ORDERS } from "./types";
 
 
 export const fetchItems = () => async dispatch => {
@@ -15,5 +15,13 @@ export const fetchItemDetails = itemUrlName => async dispatch => {
     dispatch({
         type: FETCH_ITEM,
         payload: item.payload.item
-    })
+    });
+}
+
+export const fetchItemOrders = itemUrlName => async dispatch => {
+    const orders = await (await axiosInstance.get(`/items/${itemUrlName}/orders`)).data;
+    dispatch({
+        type: FETCH_ORDERS,
+        payload: orders.payload.orders
+    });
 }
