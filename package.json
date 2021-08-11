@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lcp": "lcp"
+    "lcp": "lcp --proxyUrl https://api.warframe.market/v1"
   },
   "eslintConfig": {
     "extends": [
