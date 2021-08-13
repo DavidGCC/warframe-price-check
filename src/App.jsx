@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // COMPONENTS
 import Navbar from "./components/Navbar";
-import PriceCheck from "./routes/PriceCheck";
-import TopSelling from "./routes/TopSelling";
+import PriceCheck from "./components/PriceCheck";
+import TopSelling from "./components/TopSelling";
 
 class App extends PureComponent {
     render() {
