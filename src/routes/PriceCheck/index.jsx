@@ -2,21 +2,27 @@ import React, { PureComponent } from 'react';
 import { connect } from "react-redux";
 
 import { fetchItems, fetchItemDetails, fetchItemOrders } from "../../actions/itemActions";
-import { setFilter, removeFilter } from "../../actions/filterActions"; 
+import { setOrderFilter, removeOrderFilter, setUserFilter, removeUserFilter } from "../../actions/filterActions";
 import WindowedSelect from 'react-windowed-select';
 import ItemSet from './ItemSet.component';
 import Prices from './Prices.component';
+import Filters from './Filters.component';
+
+export const USER_STATUS = ["ingame", "online", "offline"];
+export const ORDER_TYPE = ["sell", "buy"];
 
 class PriceCheck extends PureComponent {
     constructor(props) {
         super(props);
         this.state = { options: [], selectValue: "", filters: [] }
         this.handleFetch = this.handleFetch.bind(this);
-        this.toggleFilter = this.toggleFilter.bind(this);
+        this.toggleOrderFilter = this.toggleOrderFilter.bind(this);
+        this.toggleUserFilter = this.toggleUserFilter.bind(this);
     }
 
     async componentDidMount() {
-        await this.props.fetchItems();
+        const { fetchItems } = this.props;
+        await fetchItems();
         this.setState({ options: this.createOptions() })
     }
 
@@ -29,25 +35,31 @@ class PriceCheck extends PureComponent {
         return options;
     }
 
-    toggleFilter({ target: { value } }) {
-        const { filters, setFilter, removeFilter } = this.props;
-        if (filters.includes(value)) {
-            removeFilter(value);
-        } else {
-            setFilter(value);
-        }
+    toggleOrderFilter({ target: { value } }) {
+        const { filters: { orderFilters }, setOrderFilter, removeOrderFilter } = this.props;
+        orderFilters.includes(value) ? removeOrderFilter(value) : setOrderFilter(value);
     }
+
+
+    toggleUserFilter({ target: { value } }) {
+        const { filters: { userFilters }, setUserFilter, removeUserFilter } = this.props;
+        userFilters.includes(value) ? removeUserFilter(value) : setUserFilter(value);
+    }
+
 
     async handleFetch({ value, label }) {
         let selectValue = { value, label };
+        const { options } = this.state;
+        const { fetchItemDetails, fetchItemOrders } = this.props;
         if (!value) {
-            const itemByLabel = this.state.options.find(item => item.label === label);
+            const itemByLabel = options.find(item => item.label === label);
             selectValue = itemByLabel;
         }
         this.setState({ selectValue });
-        this.props.fetchItemDetails(selectValue.value);
-        this.props.fetchItemOrders(selectValue.value);
+        fetchItemDetails(selectValue.value);
+        fetchItemOrders(selectValue.value);
     }
+
     render() {
         const { options, selectValue } = this.state;
         const { itemDetails, itemOrders, filters } = this.props;
@@ -56,8 +68,7 @@ class PriceCheck extends PureComponent {
                 <h1 className="PriceCheck__label">Select Item:</h1>
                 <WindowedSelect className="PriceCheck__select" options={options} onChange={this.handleFetch} value={selectValue}></WindowedSelect>
                 <ItemSet itemDetails={itemDetails} handleFetch={this.handleFetch} />
-                <input name="order_type" type="checkbox" checked={filters.includes("sell")} onChange={this.toggleFilter} value="sell"/>Sell
-                <input name="order_type" type="checkbox" checked={filters.includes("buy")} onChange={this.toggleFilter} value="buy"/>Buy
+                <Filters filters={filters} toggleOrderFilter={this.toggleOrderFilter} toggleUserFilter={this.toggleUserFilter} />
                 {selectValue && <Prices selectedItem={selectValue} itemOrders={itemOrders} />}
             </div>
         )
@@ -65,33 +76,38 @@ class PriceCheck extends PureComponent {
 }
 
 const mapState = state => {
-    const items_in_set = state.itemsReducer.itemDetails?.items_in_set.map(item => item.en);
-    console.log(state);
-    const itemOrders = state.itemsReducer.itemOrders?.filter(order => {
-        const isIngame = order.user.status === "ingame";
-        const { filters } = state;
-        if (isIngame && filters.length > 0) {
-            return filters.includes(order.order_type)
-        } else if (isIngame && filters.length === 0) {
-            return true;
-        } else {
-            return false;
-        }
-    })
+    const { items, itemDetails, itemOrders: itemOrdersState } = state.itemsReducer;
+    const items_in_set = itemDetails?.items_in_set.map(item => item.en);
+    const itemOrders = itemOrdersState
+        ?.filter((order) => {
+            const { userFilters, orderFilters } = state.filters;
+            const { order_type, user: { status } } = order;
+
+            return orderFilters.includes(order_type) && userFilters.includes(status);
+        })
         .sort((a, b) => a.platinum - b.platinum)
         .slice(0, 10);
+
     return {
-        items: state.itemsReducer.items,
+        items,
         itemDetails: {
-            id: state.itemsReducer.itemDetails?.id,
+            id: itemDetails?.id,
             items_in_set
         },
-        itemOrders: itemOrders,
+        itemOrders,
         filters: state.filters
     }
 };
 
-const mapDispatch = { fetchItems, fetchItemDetails, fetchItemOrders, setFilter, removeFilter };
+const mapDispatch = {
+    fetchItems,
+    fetchItemDetails,
+    fetchItemOrders,
+    setOrderFilter,
+    removeOrderFilter,
+    setUserFilter,
+    removeUserFilter
+};
 
 
 export default connect(mapState, mapDispatch)(PriceCheck);

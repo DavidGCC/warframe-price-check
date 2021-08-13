@@ -1,14 +1,36 @@
-import { SET_FILTER, REMOVE_FILTER } from "../actions/types";
+import { SET_ORDER_FILTER, REMOVE_ORDER_FILTER, SET_USER_FILTER, REMOVE_USER_FILTER } from "../actions/types";
 
-export const filterReducer = (state = [], action) => {
-    switch (action.type) {
-        case SET_FILTER:
-            return [
-                ...state, action.filter
-            ];
-        case REMOVE_FILTER:
-            const newState = [...state].filter(f => f !== action.filter)
-            return newState;
+const initialState = {
+    orderFilters: ["sell"],
+    userFilters: ["ingame"]
+};
+
+export const filterReducer = (state = initialState, action) => {
+    const { type, filter } = action;
+    const { orderFilters, userFilters } = state;
+    switch (type) {
+        case SET_ORDER_FILTER:
+            return {
+                ...state,
+                orderFilters: [...orderFilters, filter]
+            }
+        case REMOVE_ORDER_FILTER:
+            const newOrderFilters = [...orderFilters].filter(f => f !== filter);
+            return {
+                ...state,
+                orderFilters: newOrderFilters
+            }
+        case SET_USER_FILTER:
+            return {
+                ...state,
+                userFilters: [ ...userFilters, filter ]
+            }
+        case REMOVE_USER_FILTER:
+            const newUserFilters = [ ...userFilters ].filter(f => f !== filter);
+            return {
+                ...state,
+                userFilters: newUserFilters
+            }
         default:
             return state;
     }
