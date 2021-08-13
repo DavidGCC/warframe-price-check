@@ -66,8 +66,8 @@ class PriceCheck extends PureComponent {
         return (
             <div className="PriceCheck">
                 <h1 className="PriceCheck__label">Select Item:</h1>
-                <WindowedSelect className="PriceCheck__select" options={options} onChange={this.handleFetch} value={selectValue}></WindowedSelect>
-                <ItemSet itemDetails={itemDetails} handleFetch={this.handleFetch} />
+                <WindowedSelect className="PriceCheck__select" options={options} onChange={this.handleFetch} value={selectValue} />
+                {selectValue && <ItemSet itemDetails={itemDetails} handleFetch={this.handleFetch} />}
                 <Filters filters={filters} toggleOrderFilter={this.toggleOrderFilter} toggleUserFilter={this.toggleUserFilter} />
                 {selectValue && <Prices selectedItem={selectValue} itemOrders={itemOrders} />}
             </div>

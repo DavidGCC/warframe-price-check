@@ -17,6 +17,7 @@ export default class ItemSet extends PureComponent {
     render() {
         return (
             <div className="PriceCheck__item-set">
+                <h4>Items in set</h4>
                 {
                     this.renderDetails()
                 }
