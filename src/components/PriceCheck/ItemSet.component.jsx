@@ -10,17 +10,21 @@ export default class ItemSet extends PureComponent {
 
         return (
             itemDetails.items_in_set?.map(item => (
-                <button key={item.item_name} onClick={() => handleFetch({ label: item.item_name })}>{item.item_name}</button>
+                <button className="PriceCheck__item-set-button" key={item.item_name} onClick={() => handleFetch({ label: item.item_name })}>{item.item_name}</button>
             ))
         )
     }
     render() {
+        const { itemDetails } = this.props;
         return (
             <div className="PriceCheck__item-set">
                 <h4>Items in set</h4>
-                {
-                    this.renderDetails()
-                }
+                <div className="PriceCheck__item-set-items">
+                    {!itemDetails.items_in_set && <span>Select an item to see set</span>}
+                    {
+                        this.renderDetails()
+                    }
+                </div>
             </div>
         )
     }

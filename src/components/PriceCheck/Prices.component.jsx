@@ -4,9 +4,10 @@ import PriceItem from './PriceItem.component';
 export default class Prices extends PureComponent {
     render() {
         const { itemOrders } = this.props;
+        console.log(itemOrders);
         return (
             <div className="Prices">
-                <h3 className="Prices__label">
+                <h3 className="Prices__title">
                     Lowest 10 Prices
                 </h3>
                 <div className="Prices__list">
@@ -20,6 +21,7 @@ export default class Prices extends PureComponent {
                                     itemPrice={order.platinum}
                                     orderType={order.order_type}
                                     quantity={order.quantity}
+                                    rank={order.mod_rank}
                                 />
                             )
                         })

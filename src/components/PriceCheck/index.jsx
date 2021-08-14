@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 
 import { fetchItems, fetchItemDetails, fetchItemOrders } from "../../actions/itemActions";
 import { setOrderFilter, removeOrderFilter, setUserFilter, removeUserFilter } from "../../actions/filterActions";
-import WindowedSelect from 'react-windowed-select';
 import ItemSet from './ItemSet.component';
 import Prices from './Prices.component';
 import Filters from './Filters.component';
 
-export const USER_STATUS = ["ingame", "online", "offline"];
-export const ORDER_TYPE = ["sell", "buy"];
+import "./pricecheck.styles.scss";
+import ItemSelect from './ItemSelect.component';
+
+
 
 class PriceCheck extends PureComponent {
     constructor(props) {
@@ -64,11 +65,13 @@ class PriceCheck extends PureComponent {
         const { options, selectValue } = this.state;
         const { itemDetails, itemOrders, filters } = this.props;
         return (
-            <div className="PriceCheck">
-                <h1 className="PriceCheck__label">Select Item:</h1>
-                <WindowedSelect className="PriceCheck__select" options={options} onChange={this.handleFetch} value={selectValue} />
-                {selectValue && <ItemSet itemDetails={itemDetails} handleFetch={this.handleFetch} />}
-                <Filters filters={filters} toggleOrderFilter={this.toggleOrderFilter} toggleUserFilter={this.toggleUserFilter} />
+            <div className="PriceCheck__container">
+                <div className="PriceCheck">
+                    <h1 className="PriceCheck__title">Price Check</h1>
+                    <ItemSelect options={options} handleFetch={this.handleFetch} selectValue={selectValue} />
+                    <ItemSet itemDetails={itemDetails} handleFetch={this.handleFetch} />
+                    <Filters filters={filters} toggleOrderFilter={this.toggleOrderFilter} toggleUserFilter={this.toggleUserFilter} />
+                </div>
                 {selectValue && <Prices selectedItem={selectValue} itemOrders={itemOrders} />}
             </div>
         )

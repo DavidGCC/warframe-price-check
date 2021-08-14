@@ -1,0 +1,88 @@
+.PriceCheck__container {
+    display: flex;
+}
+
+.PriceCheck {
+    margin: 2rem 40px 0 40px;
+    font-family: "Roboto", sans-serif;
+    color: #070600;
+
+    &__select-container {
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    &__item-set {
+
+        h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+
+        span {
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            color: red;
+        }
+    }
+
+    &__item-set-items {
+        display: flex;
+        width: fit-content;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    &__item-set-button {
+        background-color: #230C33;
+        color: #fff;
+        height: 30px;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem
+    }
+}
+
+.Filters {
+    display: flex;
+    width: 500px;
+    gap: 50px;
+
+    &__group-name {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+
+    &__group {
+        display: flex;
+    }
+}
+
+.Prices {
+    font-family: "Roboto", sans-serif;
+    
+    &__title {
+        font-size: 2rem;
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        width: 100%;
+        flex-wrap: wrap;
+        row-gap: 10px;
+    }
+    
+    .PriceItem {
+        &__label {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    }
+
+}
