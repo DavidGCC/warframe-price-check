@@ -1,9 +1,10 @@
 .PriceCheck__container {
     display: flex;
+    margin: 2rem 40px 0 40px;
+    gap: 40px;
 }
 
 .PriceCheck {
-    margin: 2rem 40px 0 40px;
     font-family: "Roboto", sans-serif;
     color: #070600;
 
@@ -15,6 +16,8 @@
     }
 
     &__item-set {
+        width: 500px;
+        flex-wrap: wrap;
 
         h4 {
             font-size: 1.2rem;
@@ -39,12 +42,12 @@
     &__item-set-button {
         background-color: #230C33;
         color: #fff;
-        height: 30px;
         border: none;
+        cursor: pointer;
+        width: 90px;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 1rem
     }
 }
 
