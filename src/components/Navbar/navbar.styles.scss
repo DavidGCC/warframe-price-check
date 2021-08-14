@@ -1,0 +1,33 @@
+.Navbar {
+    width: 100%;
+    height: 80px;
+    font-family: "Lato", sans-serif;
+
+    &__list {
+        width: 350px;
+        height: 100%;
+        display: flex;
+        color: #000;
+        justify-content: space-between;
+        margin: 0;
+    }
+
+    &__item {
+        height: 100%;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #000;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            color: #fc440f;
+        }
+
+        &--active {
+            color: #fc440f;
+            border-bottom: 1px solid #fc440f;
+        }
+    }
+}
